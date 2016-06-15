@@ -8,6 +8,7 @@ just some changes for convenience and image generating for Debian system
 ![](http://transing.bj.bcebos.com/image/pine64/pine64-parition.jpg)
 
 boot0.bin: provided by Allwinner, no source
+
 uboot: has four sections，scp.bin is provided by Allwinner, 
 because the bl31.bin generated from source 
 `https://github.com/apritzel/arm-trusted-firmware.git`

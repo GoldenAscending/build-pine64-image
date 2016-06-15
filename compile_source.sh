@@ -43,7 +43,7 @@ make_ramdisk() {
         ROOT_PATH=$PWD
 
         mkdir -p $TEMP/bin
-        cp -va busybox $TEMP/bin
+        cp -va busybox/busybox $TEMP/bin
 
         cd $TEMP
         mkdir dev proc sys tmp sbin
@@ -56,7 +56,9 @@ make_ramdisk() {
 
         cd -
 
-        cat $TEMPFILE | gzip > build/initrd.img
+        cat $TEMPFILE | gzip > build/initrd.gz
+        
+        mv build/initrd.gz build/initrd.img
 
         rm $TEMPFILE
         rm -rf $TEMP

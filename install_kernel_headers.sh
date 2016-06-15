@@ -2,18 +2,14 @@
 
 set -e
 
-DEST="$1"
+DEST=$(readlink -f "$1")
 
 if [ -z "$DEST" ]; then
 	echo "Usage: $0 <destination-root> [linux-folder]"
 	exit 1
 fi
 
-LINUX="../linux"
-
-if [ -n "$2" ]; then
-	LINUX="$2"
-fi
+LINUX="linux-pine64"
 
 echo "Using Linux from $LINUX ..."
 
@@ -36,8 +32,9 @@ mkdir -p "$TARGET/arch/$LINUX_ARCH"
 cp -a arch/$LINUX_ARCH/Makefile "$TARGET/arch/$LINUX_ARCH"
 cp -a Module.symvers "$TARGET"
 
+
 # Install Kernel headers
-make -C $LINUX ARCH=$LINUX_ARCH CROSS_COMPILE=$CROSS_COMPILE headers_install INSTALL_HDR_PATH="$TARGET"
+make ARCH=$LINUX_ARCH CROSS_COMPILE=$CROSS_COMPILE headers_install INSTALL_HDR_PATH="$TARGET"
 
 tar cfh - include | (cd "$TARGET"; umask 000; tar xsf -)
 tar cfh - scripts | (cd "$TARGET"; umask 000; tar xsf -)

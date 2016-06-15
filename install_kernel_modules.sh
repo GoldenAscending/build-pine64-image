@@ -2,18 +2,14 @@
 
 set -e
 
-DEST="$1"
+DEST=$(readlink -f "$1")
 
 if [ -z "$DEST" ]; then
 	echo "Usage: $0 <destination-folder> [linux-folder]"
 	exit 1
 fi
 
-LINUX="../linux"
-
-if [ -n "$2" ]; then
-	LINUX="$2"
-fi
+LINUX="./linux-pine64"
 
 echo "Using Linux from $LINUX ..."
 

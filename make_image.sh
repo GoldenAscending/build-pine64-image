@@ -1,28 +1,17 @@
 #!/bin/sh
-#
-# Simple script to create a disk image which boots to U-Boot on Pine64.
-#
-# This script uses boot0 binary blob (as extracted from the Pine64 Android
-# image) together with a correctly prefixed U-Boot and A DOS partition table
-# to create a bootable SDcard image for the Pine64. If a Kernel and DTB is
-# found in ../kernel, it is added as well.
-#
-# U-Boot tree:
-# - https://github.com/longsleep/u-boot-pine64/tree/pine64-hacks
-#
-# Build the U-Boot tree and assemble it with ATF, SCP and FEX and put the
-# resulting u-boot-with-dtb.bin file into the ../build directory. The
-# u-boot-postprocess script provides an easy way to do all that.
-#
 
 set -e
 
 out="$1"
 disk_size="$2"
-kernel_tarball="$3"
+
+if [ "$(id -u)" -ne "0" ]; then
+	echo "This script requires root."
+	exit 1
+fi
 
 if [ -z "$out" ]; then
-	echo "Usage: $0 <image-file.img> [disk size in MiB] [<kernel-tarball>]"
+	echo "Usage: $0 <image-file.img> [disk size in MiB]"
 	exit 1
 fi
 
@@ -37,9 +26,9 @@ fi
 
 echo "Creating image $out of size $disk_size MiB ..."
 
-boot0="../blobs/boot0.bin"
-uboot="../build/u-boot-with-dtb.bin"
-kernel="../build"
+boot0="blobs/boot0.bin"
+uboot="build/u-boot-with-dtb.bin"
+kernel="build"
 
 temp=$(mktemp -d)
 
@@ -49,13 +38,6 @@ cleanup() {
 	fi
 }
 trap cleanup EXIT
-
-if [ -n "$kernel_tarball" ]; then
-	echo "Using Kernel from $kernel_tarball ..."
-	tar -C $temp -xJf "$kernel_tarball"
-	kernel=$temp/boot
-	mv $temp/boot/uEnv.txt.in $temp/boot/uEnv.txt
-fi
 
 boot0_position=8      # KiB
 uboot_position=19096  # KiB
@@ -85,6 +67,14 @@ rm -f ${out}1
 # Create additional ext4 file system for rootfs
 dd if=/dev/zero bs=1M count=$((disk_size-boot_size-part_position/1024)) of=${out}2
 mkfs.ext4 -F -b 4096 -E stride=2,stripe-width=1024 -L rootfs ${out}2
+
+mkdir -p rootfs_tmp
+mount -o loop ${out}2 rootfs_tmp
+cp -v -r -p rootfs_base/* rootfs_tmp/
+sync
+umount rootfs_tmp
+rm -rf rootfs_tmp
+
 dd if=${out}2 conv=notrunc oflag=append bs=1M seek=$((part_position/1024+boot_size)) of="$out"
 rm -f ${out}2
 

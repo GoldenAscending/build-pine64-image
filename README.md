@@ -24,7 +24,7 @@ rootfs：这里主要是ubuntu或者debian的系统文件，以ext4分区的形�
 
 虽然最后会有脚本一键完成各个镜像的编译，这里还是要分步解释一下各个编译步骤：
 
-1. uboot的编译
+1) uboot的编译
 
 首先是需要安装gcc-arm-linux-gnueabihf
 
@@ -41,7 +41,7 @@ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- sun50iw1p1_config
 make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
 ```
 
-2. bl31.bin的编译
+2) bl31.bin的编译
 
 这一步不是必须的，因为github上的ARM Trust Firmware在Pine A64上还有点问题
 
@@ -61,7 +61,7 @@ make clean
 make ARCH=arm CROSS_COMPILE=aarch64-linux-gnu- PLAT=sun50iw1p1 bl31
 ```
 
-3. 安装全志打包工具
+3) 安装全志打包工具
 
 这里安装用来把uboot.bin、bl31.bin、scp.bin、dtb打包成u-boot-with-dtb.bin的工具
 ```
@@ -69,7 +69,7 @@ git clone https://github.com/longsleep/sunxi-pack-tools.git sunxi-pack-tools
 make -C sunxi-pack-tools
 ```
 
-4. kernel的编译
+4) kernel的编译
 
 BSP kernel的编译
 
@@ -101,7 +101,7 @@ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j4 modules
 make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j4 dtbs
 ```
 
-5. busybox的编译
+5) busybox的编译
 
 ```
 git clone --depth 1 --branch 1_24_stable --single-branch git://git.busybox.net/busybox busybox
@@ -111,11 +111,11 @@ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j4 oldconfig
 make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j4
 ```
 
-6. rootfs的制作
+6) rootfs的制作
 
 下面以debian 8.0为例，记录rootfs的制作。主要使用的命令就是debootstrap
 
-a.安装debootstrap
+a) 安装debootstrap
 
  注意，推荐安装1.0.78或者以上版本的debootstrap。因为要确保`/usr/share/debootstrap/scripts/`
 目录下有比较新的debian或者ubuntu系统的安装脚本
@@ -190,19 +190,19 @@ echo T0:2345:respawn:/sbin/getty -L ttyS0 -a root 115200 vt100 >> /etc/inittab
 ```
 ###使用脚本进行源码下载编译和镜像生成
 
-1. 下载源码
+1) 下载源码
 
 ```
 ./download_source.sh
 ```
 
-2. 编译源码
+2) 编译源码
 
 ```
 ./compile_source.sh
 ```
 
-3. 生成rootfs(这个只需要执行一次，完成后基本就不需要再重新生成了)
+3) 生成rootfs(这个只需要执行一次，完成后基本就不需要再重新生成了)
 
 ```
 #再rootfs_base目录下debootstrap一个新debian系统，并对它进行配置
@@ -215,7 +215,7 @@ echo T0:2345:respawn:/sbin/getty -L ttyS0 -a root 115200 vt100 >> /etc/inittab
 ./install_kernel_modules.sh rootfs_base
 ```
 
-4. 生成镜像
+4) 生成镜像
 
 ```
 ./make_image.sh test.img 2048

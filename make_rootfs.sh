@@ -38,11 +38,7 @@ trap cleanup EXIT
 
 do_chroot() {
 	cmd="$@"
-	#chroot "$DEST" mount -t proc proc /proc || true
-	#chroot "$DEST" mount -t sysfs sys /sys || true
 	chroot "$DEST" $cmd
-	#chroot "$DEST" umount /sys
-	#chroot "$DEST" umount /proc
 }
 
 add_platform_scripts() {
@@ -152,7 +148,7 @@ add_asound_state() {
 }
 
 #First phase, make the core system by debootstrap
-#sudo debootstrap --arch=arm64 --foreign $DISTRO $DEST
+sudo debootstrap --arch=arm64 --foreign $DISTRO $DEST
 
 # Add qemu emulation.
 cp /usr/bin/qemu-aarch64-static "$DEST/usr/bin"
@@ -169,7 +165,7 @@ rm "$DEST/etc/resolv.conf"
 cp /etc/resolv.conf "$DEST/etc/resolv.conf"
 add_debian_apt_sources jessie
 
-#do_chroot /debootstrap/debootstrap --second-stage
+do_chroot /debootstrap/debootstrap --second-stage
 
 cat > "$DEST/second-phase" <<EOF
 #!/bin/sh

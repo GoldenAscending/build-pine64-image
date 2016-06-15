@@ -105,9 +105,9 @@ install_images() {
 set -e
 mkdir -p build/pine64
 
-#compile_uboot
-#compile_sunxi_tools
-#compile_kernel
-#compile_busybox
-#make_ramdisk
+compile_uboot
+compile_sunxi_tools
+compile_kernel
+compile_busybox
+make_ramdisk
 install_images

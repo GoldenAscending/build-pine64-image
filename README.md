@@ -5,6 +5,7 @@
 ![](http://transing.bj.bcebos.com/image/pine64/pine64-parition.jpg)
 
 boot0.bin:是由全志提供的，没有开源
+
 uboot由四个组成部分，其中scp.bin是由全志提供的。bl31.bin由于从`https://github.com/apritzel/arm-trusted-firmware.git`
 编译出来的镜像不能启动板子，所以现在用的是A64 BSP里的bl31.bin。dtb文件是用dtc编译DTS板级文件得到的，
 DTS则是从BSP固件用fdtdump反编译出来的。

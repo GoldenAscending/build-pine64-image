@@ -13,7 +13,7 @@ DTS则是从BSP固件用fdtdump反编译出来的。
 kernel的话有两种选择，一种是mainline kernel，版本是4.6以上，这个kernel会缺少lcd、camera等驱动；
 另一种是BSP kernel，驱动都比较齐全，版本是3.10。
 
-ramdisk是用busybox制作的，主要用来挂载rootfs并且用来挂载位于rootfs下的/sbin/init程序
+ramdisk是用busybox制作的，主要用来挂载rootfs并且执行位于rootfs下的/sbin/init程序
 
 kernel和ramdisk都以文件的形式放置在FAT分区内，同时放在FAT分区内的还有dtb文件
 （注意，dtb是uboot和kernel都会用到的，所以一个合并到uboot里，另一个放置于FAT分区内方便修改）

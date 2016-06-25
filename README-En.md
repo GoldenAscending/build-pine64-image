@@ -19,15 +19,15 @@ because the bl31.bin generated from source
  and those dts files in the blobs folder is extracted and dumped from BSP
  using fdtdump. 
 
-kernel: there are two choice, one is Mainline kernel, 
-which version is 4.6 currently, which is lack of some peripheral drivers(camera, LCD,..)
-another choice is BSP kernel, which version is 3.10 currently.
+kernel: There are two choice, one is Mainline kernel, 
+the version is 4.6 currently and is lack of some peripheral drivers(camera, LCD,..),
+another choice is BSP kernel, the version is 3.10 currently.
 
-ramdisk: just use busybox for partition mounting and init program launching.
+ramdisk: Just use busybox for partition mounting and init program launching.
 
 Kernel and ramdisk are placed under the FAT partition
 (you can see it when TF-Card pluged in the PC).
-And the dtb files are also placed under that FAT partition, 
+And the DTB files are also placed under that FAT partition, 
 for modification convenience.
 
 rootfs：This is the section that holding the debian or ubuntu system files
@@ -35,9 +35,7 @@ rootfs：This is the section that holding the debian or ubuntu system files
 ###Building A64 System Image Step by Step 
 
 Though some convenience shell scripts will be provided 
-to build the system image.
-
-You may want to to know what happen in those scripts, 
+to build the system image, You may want to know what happen in those scripts, 
 I will show you step by step
 
 1) Building of uboot
@@ -60,7 +58,7 @@ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
 
 2) Building of bl31.bin
 
-Not necessary here. A prebuilt version that working fine is in the 
+Not necessary here. A prebuilt version that working well is in the 
 blobs folder.
 
 Firstly, the gcc-aarch64-linux-gnu need to be installed，
@@ -80,7 +78,7 @@ make clean
 make ARCH=arm CROSS_COMPILE=aarch64-linux-gnu- PLAT=sun50iw1p1 bl31
 ```
 
-3) Building of Sunxi pack tools
+3) Building of Sunxi pack tool
 
 This tool is used to pack uboot.bin、bl31.bin、scp.bin、dtb together as one
  u-boot-with-dtb.bin binary.

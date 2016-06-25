@@ -13,8 +13,10 @@ uboot: has four sections，scp.bin is provided by Allwinner,
 because the bl31.bin generated from source 
 `https://github.com/apritzel/arm-trusted-firmware.git`
  cannot boot the board currently, so I use bl31.bin extracted from 
- BSP. dtb files is generated from dts files, 
- and those dts files in the blobs folder is extract and dump from BSP
+ BSP. 
+ 
+ DTB files is generated from dts files, 
+ and those dts files in the blobs folder is extracted and dumped from BSP
  using fdtdump. 
 
 kernel: there are two choice, one is Mainline kernel, 
